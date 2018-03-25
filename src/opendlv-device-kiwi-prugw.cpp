@@ -97,6 +97,7 @@ int32_t main(int32_t argc, char **argv) {
       }
 
     }
+    pwmMotors.powerServoRail(false);
     if (VERBOSE == 2) {
       endwin();     /* End curses mode      */
     }
