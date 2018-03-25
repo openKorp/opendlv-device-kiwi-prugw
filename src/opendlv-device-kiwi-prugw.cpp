@@ -100,7 +100,7 @@ int32_t main(int32_t argc, char **argv) {
     if (VERBOSE == 2) {
       endwin();     /* End curses mode      */
     }
+    pwmMotors.powerServoRail(false);
   }
-  pwmMotors.powerServoRail(false);
   return retCode;
 }
