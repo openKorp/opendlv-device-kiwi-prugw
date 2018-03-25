@@ -62,6 +62,7 @@ PwmMotors::PwmMotors(std::vector<std::string> a_names,
         m_motors.push_back(Motor(name, motorType, channel, offset, maxval));
       } else {
         std::cerr << " Incorrect configuration for motor type.\n";
+        exit(1);
       }
     }
     // initialisePru();

@@ -63,7 +63,13 @@ int32_t main(int32_t argc, char **argv) {
           pwmMotors.setMotorPower(1, gst.groundSteering());
         } else if (envelope.dataType() == opendlv::proxy::PedalPositionRequest::ID()) {
           opendlv::proxy::PedalPositionRequest ppr = cluon::extractMessage<opendlv::proxy::PedalPositionRequest>(std::move(envelope));
-          pwmMotors.setMotorPower(2, ppr.position());
+          float val = (ppr.position()+1)/2.0f;
+          if (val > 1.0f) {
+            val = 1.0f;
+          } else if (val < 0.1f){
+            val = 0.1f;
+          }
+          pwmMotors.setMotorPower(2, val);
         }
       }
     };
