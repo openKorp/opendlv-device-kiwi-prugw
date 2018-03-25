@@ -38,6 +38,11 @@ int32_t main(int32_t argc, char **argv) {
   } else {
 
     // Setup
+    int32_t VERBOSE{commandlineArguments.count("verbose") != 0};
+    if (VERBOSE) {
+      VERBOSE = std::stoi(commandlineArguments["verbose"]);
+    }
+
     std::vector<std::string> names = stringtoolbox::split(commandlineArguments["names"],',');
     std::vector<std::string> types = stringtoolbox::split(commandlineArguments["types"],',');
     std::vector<std::string> channels = stringtoolbox::split(commandlineArguments["channels"],',');
@@ -54,7 +59,7 @@ int32_t main(int32_t argc, char **argv) {
     }
 
     PwmMotors pwmMotors(names, types, channels, offets, maxvals);
-    
+    pwmMotors.powerServoRail(true);
 
     cluon::OD4Session od4{static_cast<uint16_t>(std::stoi(commandlineArguments["cid"])),
       [&pwmMotors](cluon::data::Envelope &&envelope){
@@ -74,19 +79,28 @@ int32_t main(int32_t argc, char **argv) {
       }
     };
 
-    initscr();
+    if (VERBOSE == 2) {
+      initscr();
+    }
     // getch();       /Wait for user input 
 
     while (od4.isRunning()) {
       // This must be called regularly (>40hz) to keep servos or ESCs awake.
       std::this_thread::sleep_for(std::chrono::duration<double>(1.0 / 50.0f));
-      // pwmMotors.actuate();
-      mvprintw(1,1,(pwmMotors.toString()).c_str());  /* Print Hello World      */
-      // addstr(pwmMotors.toString().c_str());
-      refresh();      /* Print it on to the real screen */
+      pwmMotors.actuate();
+      if (VERBOSE == 1) {
+        std::cout << pwmMotors.toString() << std::endl;
+      }
+      if (VERBOSE == 2) {
+        mvprintw(1,1,(pwmMotors.toString()).c_str());  /* Print Hello World      */
+        refresh();      /* Print it on to the real screen */
+      }
 
     }
-    endwin();     /* End curses mode      */
+    if (VERBOSE == 2) {
+      endwin();     /* End curses mode      */
+    }
   }
+  pwmMotors.powerServoRail(false);
   return retCode;
 }

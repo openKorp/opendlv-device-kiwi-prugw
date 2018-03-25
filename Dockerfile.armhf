@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FROM pipill/armhf-alpine:edge as builder
-
+MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
 RUN [ "cross-build-start" ]
 
 RUN cat /etc/apk/repositories && \
@@ -25,6 +25,8 @@ RUN apk update && \
     apk --no-cache add \
         cmake \
         g++ \
+        ncurses-dev \
+        upx \
         make
 ADD . /opt/sources
 WORKDIR /opt/sources
@@ -32,13 +34,19 @@ RUN rm -rf build && \
     mkdir build && \
     cd build && \
     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/tmp/opendlv-device-kiwi-prugw-dest .. && \
-    make -j4 && make install
+    make -j4 && make install && upx -9 /tmp/opendlv-device-kiwi-prugw-dest/bin/opendlv-device-kiwi-prugw
+
 
 RUN [ "cross-build-end" ]
 
 
 FROM pipill/armhf-alpine:edge
-
+MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
+RUN [ "cross-build-start" ]
+RUN apk update && \
+    apk --no-cache add \
+    ncurses-dev 
+RUN [ "cross-build-end" ]
 WORKDIR /usr/bin
 COPY --from=builder /tmp/opendlv-device-kiwi-prugw-dest/ /usr/
 CMD ["/usr/bin/opendlv-device-kiwi-prugw"]

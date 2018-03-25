@@ -2,9 +2,13 @@
 
 VERSION=$1
 
-docker build -t openkorp/opendlv-device-kiwi-prugw-amd64:$VERSION -f Dockerfile.amd64 .
+docker build -t openkorp/opendlv-device-kiwi-prugw-aarch64:$VERSION -f Dockerfile.aarch64 . &
+docker build -t openkorp/opendlv-device-kiwi-prugw-amd64:$VERSION -f Dockerfile.amd64 . &
 docker build -t openkorp/opendlv-device-kiwi-prugw-armhf:$VERSION -f Dockerfile.armhf .
-docker build -t openkorp/opendlv-device-kiwi-prugw-aarch64:$VERSION -f Dockerfile.aarch64 .
+
+docker push openkorp/opendlv-device-kiwi-prugw-aarch64:$VERSION 
+docker push openkorp/opendlv-device-kiwi-prugw-amd64:$VERSION 
+docker push openkorp/opendlv-device-kiwi-prugw-armhf:$VERSION 
 
 cat <<EOF >/tmp/multi.yml
 image: openkorp/opendlv-device-kiwi-prugw-multi:$VERSION

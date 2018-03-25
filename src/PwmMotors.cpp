@@ -65,8 +65,8 @@ PwmMotors::PwmMotors(std::vector<std::string> a_names,
         exit(1);
       }
     }
-    // initialisePru();
-    // powerServoRail(true);
+    initialisePru();
+    powerServoRail(true);
   } else {
     std::cerr << " Invalid number of configurations for pwm motors.\n";
   }
@@ -125,52 +125,11 @@ void PwmMotors::initialisePru()
 
 PwmMotors::~PwmMotors() 
 {
-  std::cout << " Turning off servo power rail.\n";
+  // std::cout << " Turning off servo power rail.\n";
   setServoNormalizedAll(0);
-  powerServoRail(false);
   m_prusharedMemInt32_ptr = NULL;
 }
 
-
-// void PwmMotor::nextContainer(odcore::data::Container &a_container)
-// {
-//   // (void) a_container;
-//   if (a_container.getDataType() == opendlv::proxy::GroundSteeringRequest::ID()) {
-//     opendlv::proxy::GroundSteeringRequest gsr = 
-//         a_container.getData<opendlv::proxy::GroundSteeringRequest>();
-//     float const MAX_STEERING_ANGLE = 38.0f;
-//     float const MAX_ANGLE = 90.0f;
-//     float angle = gsr.getSteeringAngle() * 180 / static_cast<float>(M_PI);
-//     if (angle > MAX_STEERING_ANGLE) {
-//       angle = MAX_STEERING_ANGLE;
-//     } else if (angle < -MAX_STEERING_ANGLE) {
-//       angle = -MAX_STEERING_ANGLE;
-//     }
-//     float servoSignal = angle / MAX_ANGLE;
-//     setMotorPower("steering", servoSignal);
-//   } else if (a_container.getDataType() == opendlv::proxy::PedalPositionReading::ID()){
-//     opendlv::proxy::PedalPositionReading ppr = 
-//         a_container.getData<opendlv::proxy::PedalPositionReading>();
-//     float power;
-//     if(a_container.getSenderStamp() == 1) {
-//       power = ppr.getPercent();
-//     } else if (a_container.getSenderStamp() == 2) {
-//       power = -ppr.getPercent();
-//     }
-//     power += 1;
-//     power *= 0.5f;
-//     setMotorPower("propulsion", power);
-//   }
-//   // else if (a_container.getDataType() == 
-//   //       odcockpit::RuntimeConfiguration::ID()) {
-//   //   odcockpit::RuntimeConfiguration rc = 
-//   //       a_container.getData<odcockpit::RuntimeConfiguration>();
-//   //   if (rc.containsKey_MapOfParameters(m_motorsName + ":power")) {
-//   //     double power = rc.getValueForKey_MapOfParameters(m_motorsName + ":power");
-//   //     SetDutyCycleNs(Power2Pwm(power));
-//   //   }
-//   // }
-// }
 
 void PwmMotors::setMotorPower(uint8_t a_ch, float a_power) {
   for (uint8_t i = 0; i < m_motors.size(); ++i) {

@@ -23,6 +23,7 @@ RUN apk update && \
         g++ \
         upx \
         ccache \
+        ncurses-dev \
         make 
 
 ADD . /opt/sources
@@ -36,6 +37,9 @@ RUN rm -rf build && \
 
 
 FROM alpine:edge
+RUN apk update && \
+    apk --no-cache add \
+    ncurses-dev 
 MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
 
 WORKDIR /usr/bin

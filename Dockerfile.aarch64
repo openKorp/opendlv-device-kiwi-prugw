@@ -15,10 +15,9 @@
 
 # Part to build opendlv-device-lidar-vlp16.
 FROM docker.io/project31/aarch64-alpine-qemu:3.5-7 as builder
-MAINTAINER Christian Berger "christian.berger@gu.se"
+MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
 
 RUN [ "cross-build-start" ]
-MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
 
 RUN cat /etc/apk/repositories && \
     echo http://dl-4.alpinelinux.org/alpine/v3.7/main > /etc/apk/repositories && \
@@ -30,6 +29,7 @@ RUN apk update && \
         g++ \
         upx \
         ccache \
+        ncurses-dev \
         make 
 
 ADD . /opt/sources
@@ -48,7 +48,11 @@ RUN [ "cross-build-end" ]
 # Part to deploy opendlv-device-lidar-vlp16.
 FROM docker.io/project31/aarch64-alpine-qemu:3.5-7
 MAINTAINER Björnborg Nguyen "bjornborg.nguyen@chalmers.se"
-
+RUN [ "cross-build-start" ]
+RUN apk update && \
+    apk --no-cache add \
+    ncurses-dev
+RUN [ "cross-build-end" ]
 WORKDIR /usr/bin
 COPY --from=builder /tmp/opendlv-device-kiwi-prugw-dest/ /usr/
 CMD ["/usr/bin/opendlv-device-kiwi-prugw"]

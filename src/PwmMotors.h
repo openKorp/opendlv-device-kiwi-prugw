@@ -39,10 +39,10 @@ class PwmMotors {
   void actuate();
   std::string toString();
   void setMotorPower(uint8_t, float);
-
- private:
   void initialisePru();
   void powerServoRail(bool);
+
+ private:
   int32_t getPruEncoderPos();
   int8_t setPruEncoderPos(int32_t );
   int8_t setPwmMicroSeconds(uint8_t const, uint32_t const );
