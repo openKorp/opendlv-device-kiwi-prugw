@@ -126,7 +126,7 @@ void PwmMotors::initialisePru()
 PwmMotors::~PwmMotors() 
 {
   // std::cout << " Turning off servo power rail.\n";
-  pwmMotors.powerServoRail(false);
+  powerServoRail(false);
   setServoNormalizedAll(0);
   m_prusharedMemInt32_ptr = NULL;
 }

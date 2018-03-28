@@ -30,10 +30,11 @@ int32_t main(int32_t argc, char **argv) {
       0 == commandlineArguments.count("types") ||
       0 == commandlineArguments.count("channels") ||
       0 == commandlineArguments.count("offsets") ||
-      0 == commandlineArguments.count("maxvals")) {
+      0 == commandlineArguments.count("maxvals") ||
+      0 == commandlineArguments.count("angleconversion")) {
     std::cerr << argv[0] << " interfaces to the motors of the Kiwi platform." << std::endl;
-    std::cerr << "Usage:   " << argv[0] << " --cid=<OpenDaVINCI session> --names=<Strings> --types=<esc or servo> --channels=<1...8>  --offsets<-1...1> --maxvals=<floats> [--verbose]" << std::endl;
-    std::cerr << "Example: " << argv[0] << " --cid=111 --names=steering,propulsion --types=servo,esc --channels=1,2 --offsets=0,0 --maxvals=0.5,0" << std::endl;
+    std::cerr << "Usage:   " << argv[0] << " --cid=<OpenDaVINCI session> --names=<Strings> --types=<esc or servo> --channels=<1...8>  --offsets<-1...1> --maxvals=<floats> --angleconversion=<const> [--verbose]" << std::endl;
+    std::cerr << "Example: " << argv[0] << " --cid=111 --names=steering,propulsion --types=servo,esc --channels=1,2 --offsets=0,0 --maxvals=0.5,0 --angleconversion=1" << std::endl;
     retCode = 1;
   } else {
 
@@ -48,6 +49,7 @@ int32_t main(int32_t argc, char **argv) {
     std::vector<std::string> channels = stringtoolbox::split(commandlineArguments["channels"],',');
     std::vector<std::string> offets = stringtoolbox::split(commandlineArguments["offsets"],',');
     std::vector<std::string> maxvals = stringtoolbox::split(commandlineArguments["maxvals"],',');
+    float const angleConversion = std::stof(commandlineArguments["angleconversion"]);
 
     if (names.size() != types.size() ||
         names.size() != types.size() ||
@@ -62,10 +64,11 @@ int32_t main(int32_t argc, char **argv) {
     pwmMotors.powerServoRail(true);
 
     cluon::OD4Session od4{static_cast<uint16_t>(std::stoi(commandlineArguments["cid"])),
-      [&pwmMotors](cluon::data::Envelope &&envelope){
+      [&pwmMotors, &angleConversion](cluon::data::Envelope &&envelope){
         if (envelope.dataType() == opendlv::proxy::GroundSteeringRequest::ID()) {
           opendlv::proxy::GroundSteeringRequest gst = cluon::extractMessage<opendlv::proxy::GroundSteeringRequest>(std::move(envelope));
-          pwmMotors.setMotorPower(1, gst.groundSteering());
+          float groundSteering = gst.groundSteering() / angleConversion;
+          pwmMotors.setMotorPower(1, groundSteering);
         } else if (envelope.dataType() == opendlv::proxy::PedalPositionRequest::ID()) {
           opendlv::proxy::PedalPositionRequest ppr = cluon::extractMessage<opendlv::proxy::PedalPositionRequest>(std::move(envelope));
           float val = (ppr.position()+1)/2.0f;

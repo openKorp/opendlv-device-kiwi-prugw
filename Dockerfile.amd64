@@ -25,7 +25,6 @@ RUN apk update && \
         ccache \
         ncurses-dev \
         make 
-
 ADD . /opt/sources
 WORKDIR /opt/sources
 RUN rm -rf build && \

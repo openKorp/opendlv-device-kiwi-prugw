@@ -57,18 +57,26 @@ uint8_t Motor::getChannel()
 
 float Motor::getPower()
 {
-  float val = m_power;
-  if (val < -m_maxval) {
-    val = -m_maxval;
-  } else if (val > m_maxval) {
-    val = m_maxval;
+  if (m_power > 1.5f) {
+    return 1.4999f;
+  } else if (m_power < -1.5f) {
+    return -1.4999f;
   }
-  return val - m_offset;
+  return m_power;
 }
 
 void Motor::setPower(float const a_val)
 {
-  m_power = a_val;
+  float val{a_val + m_offset};
+  if(m_type ==  MotorType::Esc) {
+    val = a_val / 2.0f + m_offset;
+  }
+  if (val < -m_maxval + m_offset) {
+    val = -m_maxval + m_offset;
+  } else if (val > m_maxval + m_offset) {
+    val = m_maxval + m_offset;
+  }
+  m_power = val;
 }
 
 std::string Motor::toString() 

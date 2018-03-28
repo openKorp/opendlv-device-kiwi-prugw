@@ -27,7 +27,7 @@ RUN apk update && \
         g++ \
         ncurses-dev \
         upx \
-        make
+        make     
 ADD . /opt/sources
 WORKDIR /opt/sources
 RUN rm -rf build && \
