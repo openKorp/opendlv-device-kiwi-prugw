@@ -85,19 +85,25 @@ int32_t main(int32_t argc, char **argv) {
     if (VERBOSE == 2) {
       initscr();
     }
-    // getch();       /Wait for user input 
+    auto start = std::chrono::steady_clock::now();
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> diff = end-start;
 
     while (od4.isRunning()) {
+      diff = end-start;
       // This must be called regularly (>40hz) to keep servos or ESCs awake.
-      std::this_thread::sleep_for(std::chrono::duration<double>(1.0 / 50.0f));
-      pwmMotors.actuate();
+      std::this_thread::sleep_for(std::chrono::duration<double>(1.0 / 50.0f) - diff);
+      start = std::chrono::steady_clock::now();
+      // pwmMotors.actuate();
       if (VERBOSE == 1) {
         std::cout << pwmMotors.toString() << std::endl;
       }
       if (VERBOSE == 2) {
-        mvprintw(1,1,(pwmMotors.toString()).c_str());  /* Print Hello World      */
+        mvprintw(1,1,(pwmMotors.toString()).c_str()); 
+        mvprintw(10,1, ("Run clock seconds: " + std::to_string(diff.count())).c_str());
         refresh();      /* Print it on to the real screen */
       }
+      end = std::chrono::steady_clock::now();
 
     }
     pwmMotors.powerServoRail(false);

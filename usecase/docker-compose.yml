@@ -7,7 +7,12 @@ services:
         privileged: true
         volumes:
             - /sys/:/sys/
-        command: "/usr/bin/opendlv-device-kiwi-prugw --cid=${CID} \
-                --names=${NAMES} --types=${TYPES} --channels=${CHANNELS} \
-                --offsets=${OFFSETS} --maxvals=${MAXVALS} \
-                --angleconversion=${ANGLECONVERSION} --verbose=0"
+        command: "/usr/bin/opendlv-device-kiwi-prugw \
+                --cid=${CID} \
+                --names=${NAMES} \
+                --types=${TYPES} \
+                --channels=${CHANNELS} \
+                --offsets=${OFFSETS} \
+                --maxvals=${MAXVALS} \
+                --angleconversion=${ANGLECONVERSION} \
+                --verbose=0"

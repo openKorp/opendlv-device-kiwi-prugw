@@ -1,4 +1,6 @@
 /**
+ * Copyright (C) 2018 Chalmers Revere
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -24,9 +26,6 @@
 #include <unistd.h> // for close
 #include <sys/mman.h> // mmap
 #include <cstring> // for memset
-// #include <stdio.h>
-
-// #include <odvdminiature/GeneratedHeaders_ODVDMiniature.h>
 
 #include "PwmMotors.h"
 
@@ -65,8 +64,8 @@ PwmMotors::PwmMotors(std::vector<std::string> a_names,
         exit(1);
       }
     }
-    initialisePru();
-    powerServoRail(true);
+    // initialisePru();
+    // powerServoRail(true);
   } else {
     std::cerr << " Invalid number of configurations for pwm motors.\n";
   }

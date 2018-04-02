@@ -1,6 +1,5 @@
 /**
- * proxy-miniature-pwm-motor - Interface to motor through pwm.
- * Copyright (C) 2017 Chalmers Revere
+ * Copyright (C) 2018 Chalmers Revere
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +21,6 @@
 #include <vector>
 #include <mutex>
 
-// #include "opendavinci/odcore/base/Mutex.h"
 
 
 #include "Motor.h"
@@ -33,8 +31,6 @@
 class PwmMotors {
  public:
   PwmMotors(std::vector<std::string>, std::vector<std::string>, std::vector<std::string>, std::vector<std::string>, std::vector<std::string>);
-  PwmMotors(const PwmMotors &) = delete;
-  PwmMotors &operator=(const PwmMotors &) = delete;
   virtual ~PwmMotors();
   void actuate();
   std::string toString();
@@ -43,6 +39,11 @@ class PwmMotors {
   void powerServoRail(bool);
 
  private:
+  PwmMotors(const PwmMotors &) = delete;
+  PwmMotors(PwmMotors &&) = delete;
+  PwmMotors &operator=(const PwmMotors &) = delete;
+  PwmMotors &operator=(PwmMotors &&) = delete;
+
   int32_t getPruEncoderPos();
   int8_t setPruEncoderPos(int32_t );
   int8_t setPwmMicroSeconds(uint8_t const, uint32_t const );
