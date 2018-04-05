@@ -94,7 +94,7 @@ int32_t main(int32_t argc, char **argv) {
       // This must be called regularly (>40hz) to keep servos or ESCs awake.
       std::this_thread::sleep_for(std::chrono::duration<double>(1.0 / 50.0f) - diff);
       start = std::chrono::steady_clock::now();
-      // pwmMotors.actuate();
+      pwmMotors.actuate();
       if (VERBOSE == 1) {
         std::cout << pwmMotors.toString() << std::endl;
       }
