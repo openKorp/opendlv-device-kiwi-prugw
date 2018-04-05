@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  Christian Berger
+ * Copyright (C) 2018  Björnborg Nguyen
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,16 +48,17 @@ TEST_CASE("Test esc motor") {
   std::string name = "esc";
   Motor::MotorType type = Motor::MotorType::Esc;
   uint8_t channel = 0;
-  float offset = 0.5;
-  float maxval = 0.5;
+  float offset = 0.0f;
+  float maxval = 1.0f;
   Motor esc(name, type, channel, offset, maxval);
   REQUIRE(Motor::MotorType::Esc == esc.getType());
   REQUIRE(channel == esc.getChannel());
-  REQUIRE(std::abs(0.5f - esc.getPower()) < 0.00001f) ;
+  REQUIRE(std::abs(0.0f - esc.getPower()) < 0.00001f) ;
   esc.setPower(2.0f);
   REQUIRE(std::abs(1.0f - esc.getPower()) < 0.00001f);
   esc.setPower(-2.0f);
-  std::cout << esc.getPower() << std::endl;
   REQUIRE(std::abs(0.0f - esc.getPower()) < 0.00001f);
+  esc.setPower(0.1f);
+  REQUIRE(std::abs(0.1f - esc.getPower()) < 0.00001f);
 }
 

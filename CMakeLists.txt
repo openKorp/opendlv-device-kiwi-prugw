@@ -1,4 +1,4 @@
-# Copyright (C) 2018 Ola Benderius
+# Copyright (C) 2018 Björnborg
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ endif(CCACHE_FOUND)
 
 cmake_minimum_required(VERSION 3.2)
 
-project(opendlv-device-kiwi-prugw)
+project(openkorp-device-kiwi-prugw)
 
 ################################################################################
 # Defining the relevant versions of OpenDLV Standard Message Set and libcluon.

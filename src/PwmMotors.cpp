@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Chalmers Revere
+ * Copyright (C) 2018 Björnborg Ngúyen
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,8 @@ PwmMotors::PwmMotors(std::vector<std::string> a_names,
         exit(1);
       }
     }
-    initialisePru();
-    powerServoRail(true);
+    // initialisePru();
+    // powerServoRail(true);
   } else {
     std::cerr << " Invalid number of configurations for pwm motors.\n";
   }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Chalmers Revere
+ * Copyright (C) 2018 Björnborg Ngúyen
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,21 +24,10 @@ Motor::Motor(std::string const a_name, MotorType const a_type,
     : m_name(a_name)
     , m_type(a_type)
     , m_channel(a_ch)
-    , m_power()
+    , m_power(0.0f)
     , m_offset(a_offset)
     , m_maxval(a_maxval)
-{
-  switch (m_type) {
-    case MotorType::Esc :
-      m_power = 0.5f;
-      break;
-    case MotorType::Servo :
-      m_power = 0.0f;
-      break;
-    default:
-      break;
-  }
-}
+{}
 Motor::~Motor()
 {}
 
@@ -69,16 +58,25 @@ float Motor::getPower()
 
 void Motor::setPower(float const a_val)
 {
-  float val{a_val + m_offset};
   if(m_type ==  MotorType::Esc) {
-    val = a_val / 2.0f + m_offset;
+    float val = a_val;
+    if (val < - m_maxval  + m_offset) {
+      val = - m_maxval + m_offset;
+    } else if (val > m_maxval + m_offset) {
+      val = m_maxval + m_offset;
+    } if (val < 0) {
+      val = 0;
+    }
+    m_power = val;
+  } else {
+    float val{a_val + m_offset};
+    if (val < -m_maxval + m_offset) {
+      val = -m_maxval + m_offset;
+    } else if (val > m_maxval + m_offset) {
+      val = m_maxval + m_offset;
+    }
+    m_power = val;
   }
-  if (val < -m_maxval + m_offset) {
-    val = -m_maxval + m_offset;
-  } else if (val > m_maxval + m_offset) {
-    val = m_maxval + m_offset;
-  }
-  m_power = val;
 }
 
 std::string Motor::toString() 
