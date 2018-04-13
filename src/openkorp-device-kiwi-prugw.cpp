@@ -19,8 +19,10 @@
 
 #include "cluon-complete.hpp"
 #include "opendlv-standard-message-set.hpp"
+#include "openkorp-message-set.hpp"
 
 #include "PwmMotors.h"
+
 
 int32_t main(int32_t argc, char **argv) {
   int32_t retCode{0};
