@@ -63,25 +63,20 @@ int32_t main(int32_t argc, char **argv) {
 
     PwmMotors pwmMotors(names, types, channels, offets, maxvals);
 
-    cluon::OD4Session od4{static_cast<uint16_t>(std::stoi(commandlineArguments["cid"])),
-      [&pwmMotors](cluon::data::Envelope &&envelope){
-        (void) envelope;
-        // if (envelope.dataType() == opendlv::proxy::GroundSteeringRequest::ID()) {
-        //   opendlv::proxy::GroundSteeringRequest gst = cluon::extractMessage<opendlv::proxy::GroundSteeringRequest>(std::move(envelope));
-        //   float groundSteering = gst.groundSteering() / angleConversion;
-        //   pwmMotors.setMotorPower(1, groundSteering);
-        // } else if (envelope.dataType() == opendlv::proxy::PedalPositionRequest::ID()) {
-        //   opendlv::proxy::PedalPositionRequest ppr = cluon::extractMessage<opendlv::proxy::PedalPositionRequest>(std::move(envelope));
-        //   float val = (ppr.position()+1)/2.0f;
-        //   if (val > 1.0f) {
-        //     val = 1.0f;
-        //   } else if (val < 0.1f){
-        //     val = 0.1f;
-        //   }
-        //   pwmMotors.setMotorPower(2, val);
-        // }
+    auto onPwmMotorRequest{[&pwmMotors](cluon::data::Envelope &&envelope)
+    {
+      openkorp::proxy::PwmMotorRequest const pmr = cluon::extractMessage<openkorp::proxy::PwmMotorRequest>(std::move(envelope));
+      float val = (pmr.power()+1)/2.0f;
+      if (val > 1.0f) {
+        val = 1.0f;
+      } else if (val < 0.1f){
+        val = 0.1f;
       }
-    };
+      pwmMotors.setMotorPower(envelope.senderStamp(), val);
+    }};
+
+    cluon::OD4Session od4{static_cast<uint16_t>(std::stoi(commandlineArguments["cid"]))};
+    od4.dataTrigger(openkorp::proxy::PwmMotorRequest::ID(), onPwmMotorRequest);
 
     if (VERBOSE == 2) {
       initscr();
@@ -89,7 +84,8 @@ int32_t main(int32_t argc, char **argv) {
     auto atFrequency{[&pwmMotors, &VERBOSE]() -> bool
     {
       // This must be called regularly (>40hz) to keep servos or ESCs awake.
-      // pwmMotors.actuate();
+      // This needs to be chacked
+      pwmMotors.actuate();
       if (VERBOSE == 1) {
         std::cout << pwmMotors.toString() << std::endl;
       }

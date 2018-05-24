@@ -2,7 +2,7 @@ version: '2'
 
 services:
     device-kiwi-prugw:
-        image: openkorp/openkorp-device-kiwi-prugw-multi:latest
+        image: openkorp/openkorp-device-bbblue-prugw-multi:latest
         network_mode: "host"
         privileged: true
         volumes:
@@ -14,5 +14,4 @@ services:
                 --channels=${CHANNELS} \
                 --offsets=${OFFSETS} \
                 --maxvals=${MAXVALS} \
-                --angleconversion=${ANGLECONVERSION} \
                 --verbose=0"

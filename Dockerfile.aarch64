@@ -40,8 +40,8 @@ WORKDIR /opt/sources
 RUN rm -rf build && \
     mkdir build && \
     cd build && \
-    cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/tmp/openkorp-device-kiwi-prugw-dest .. && \
-    make -j4 && make install && upx -9 /tmp/openkorp-device-kiwi-prugw-dest/bin/openkorp-device-kiwi-prugw
+    cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/tmp/openkorp-device-bbblue-prugw-dest .. && \
+    make -j4 && make install && upx -9 /tmp/openkorp-device-bbblue-prugw-dest/bin/openkorp-device-bbblue-prugw
 
 
 
@@ -58,5 +58,5 @@ RUN apk update && \
     ncurses-dev
 RUN [ "cross-build-end" ]
 WORKDIR /usr/bin
-COPY --from=builder /tmp/openkorp-device-kiwi-prugw-dest/ /usr/
-CMD ["/usr/bin/openkorp-device-kiwi-prugw"]
+COPY --from=builder /tmp/openkorp-device-bbblue-prugw-dest/ /usr/
+CMD ["/usr/bin/openkorp-device-bbblue-prugw"]

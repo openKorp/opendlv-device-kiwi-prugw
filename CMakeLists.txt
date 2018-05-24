@@ -21,13 +21,13 @@ endif(CCACHE_FOUND)
 
 cmake_minimum_required(VERSION 3.2)
 
-project(openkorp-device-kiwi-prugw)
+project(openkorp-device-bbblue-prugw)
 
 ################################################################################
 # Defining the relevant versions of OpenDLV Standard Message Set and libcluon.
 set(OPENDLV_STANDARD_MESSAGE_SET opendlv-standard-message-set.odvd)
 set(OPENKORP_MESSAGE_SET openkorp-message-set.odvd)
-set(CLUON_COMPLETE cluon-complete-v0.0.63.hpp)
+set(CLUON_COMPLETE cluon-complete-v0.0.98.hpp)
 
 ################################################################################
 # This project requires C++14 or newer.
