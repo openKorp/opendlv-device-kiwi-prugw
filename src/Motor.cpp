@@ -24,21 +24,11 @@ Motor::Motor(std::string const a_name, MotorType const a_type,
     : m_name(a_name)
     , m_type(a_type)
     , m_channel(a_ch)
-    , m_power()
+    , m_power(a_offset)
     , m_offset(a_offset)
     , m_maxval(a_maxval)
-{
-  switch (m_type) {
-    case MotorType::Esc :
-      setPower(0.5);
-      break;
-    case MotorType::Servo :
-      setPower(0);
-      break;
-    default:
-      break;
-  }
-}
+{}
+
 Motor::~Motor()
 {}
 
