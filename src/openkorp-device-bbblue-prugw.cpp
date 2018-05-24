@@ -66,11 +66,11 @@ int32_t main(int32_t argc, char **argv) {
     auto onPwmMotorRequest{[&pwmMotors](cluon::data::Envelope &&envelope)
     {
       openkorp::proxy::PwmMotorRequest const pmr = cluon::extractMessage<openkorp::proxy::PwmMotorRequest>(std::move(envelope));
-      float val = (pmr.power()+1)/2.0f;
+      float val = pmr.power();
       if (val > 1.0f) {
         val = 1.0f;
-      } else if (val < 0.1f){
-        val = 0.1f;
+      } else if (val < 0.0f){
+        val = 0.0f;
       }
       pwmMotors.setMotorPower(envelope.senderStamp(), val);
     }};
