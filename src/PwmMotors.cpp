@@ -75,8 +75,8 @@ PwmMotors::PwmMotors(std::vector<std::string> a_names,
         exit(1);
       }
     }
-    // initialisePru();
-    // powerServoRail(true);
+    initialisePru();
+    powerServoRail(true);
   } else {
     std::cerr << " Invalid number of configurations for pwm motors.\n";
   }
